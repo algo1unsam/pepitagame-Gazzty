@@ -1,3 +1,4 @@
+import example.*
 import pepita.*
 import wollok.game.*
 
@@ -18,6 +19,11 @@ object silvestre {
 
 	method image() = "silvestre.png"
 
-	method position() = game.origin()
-	
+	method position(){
+        return if(pepita.position().x() < 3){
+            game.at(3,0)
+        }else{
+            game.at(pepita.position().x(), 0)
+        }
+    }
 }

@@ -1,3 +1,4 @@
+import example.*
 import extras.*
 import wollok.game.*
 
@@ -7,7 +8,13 @@ object pepita {
 	var property position = game.origin()
 
 	method image() {
-		return if (self.estaEnElNido()) "pepita-grande.png" else "pepita.png"
+		return if (self.estaEnElNido()) {
+			"pepita-grande.png"
+			} else if (self.esAtrapada() or self.estaCansada()){
+				"pepita-gris.png"
+				}
+					else {
+						"pepita.png"}
 	}
 
 	method come(comida) {
@@ -36,5 +43,11 @@ object pepita {
 		return position.y() == 0 
 	}
 
+    // Custom code
+    /* method win() {
+        game.whenCollideDo(nido, nido.teEncontro(self))
+    } */
+    method esAtrapada(){
+        return self.position() == silvestre.position()
+    }
 }
-
