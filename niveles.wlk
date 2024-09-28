@@ -22,6 +22,7 @@ object tutorial2 {
 		game.addVisual(silvestre)
 		game.addVisual(pepita)
 		config.configurarTeclas()
+        config.configurarComida()
 		//config.configurarGravedad()  
 	}
 
@@ -37,19 +38,46 @@ object tutorial3 {
 		game.addVisual(pepita)
 		config.configurarTeclas()
 		config.configurarColisiones()
+        config.configurarComida()
 	//	config.configurarGravedad()
 	}
-
 }
 
 object config {
 
+    // REVISAR QUE NO SE MUEVA PEPITA
 	method configurarTeclas() {
-		keyboard.left().onPressDo({ pepita.irA(pepita.position().left(1)) })
-		keyboard.right().onPressDo({ pepita.irA(pepita.position().right(1))})
+		if(!pepita.estaCansada()){
+            keyboard.left().onPressDo({ pepita.irA(pepita.position().left(1)) })
+		    keyboard.right().onPressDo({ pepita.irA(pepita.position().right(1))})
+		    keyboard.up().onPressDo({ pepita.irA(pepita.position().up(1))})
+		    keyboard.down().onPressDo({ pepita.irA(pepita.position().down(1))})
+        }
+        else{
+            // No supe como hacer que no se mueva pepita sin energia :(
+            keyboard.left().onPressDo({ pepita.irA(pepita.position().left(0)) })
+		    keyboard.right().onPressDo({ pepita.irA(pepita.position().right(0))})
+		    keyboard.up().onPressDo({ pepita.irA(pepita.position().up(0))})
+		    keyboard.down().onPressDo({ pepita.irA(pepita.position().down(0))})
+        }
+        if(pepita.estaCansada()){
+            game.say(pepita, 'PERDI!')
+        }
 	}
 	
 	method configurarColisiones() {
-		game.onCollideDo(pepita, { algo => algo.teEncontro(pepita) })
+		if(game.uniqueCollider(pepita) == nido){
+            game.onCollideDo(pepita, { algo => algo.teEncontro(pepita) })
+            game.say(pepita, 'GANE!')
+        }
+        else if(game.uniqueCollider(pepita) == silvestre){
+            game.stop()
+        }
 	}
+
+    method configurarComida(){
+        keyboard.c().onPressDo({ 
+            pepita.come(game.uniqueCollider(pepita))    
+        })
+    }
 }

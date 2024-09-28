@@ -19,4 +19,3 @@ object alpiste {
 	method energiaQueOtorga() = 70
 
 }
-
